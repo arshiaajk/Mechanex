@@ -79,6 +79,11 @@ h2{border-inline-start:4px solid var(--yel);padding-inline-start:10px}
 .btn.alt:hover{background:linear-gradient(180deg,#ffd45e,#ff9d00)}
 .opt{background:linear-gradient(180deg,#1b1b1d,#121213)}
 .sw{box-shadow:inset 0 2px 4px #fff3}
+.opt .tag{font-size:12px}
+.opt .pr{display:block;margin-top:8px;font-weight:800;font-size:14px;line-height:1.4}
+.opt .pr small{display:block;color:var(--mute);font-weight:400;font-size:11px}
+.opt:hover{border-color:var(--yel);transform:translateY(-3px)}
+@media(max-width:600px){.picker{gap:8px}.opt{padding:10px 4px}.opt b{font-size:13px}}
 </style>
 </head>
 <body>
@@ -146,11 +151,11 @@ function home(){
   <p>اندازه دستگاه را انتخاب کن، رنگ و زمان ساخت را تعیین کن و قیمت را همان لحظه ببین.</p></section>
   <h2>اندازه دستگاه را انتخاب کنید</h2>
   <div class="picker" id="pk">${Object.entries(PRODUCTS).map(([k,p])=>`
-    <button class="opt" data-k="${k}"><div style="width:${55+45*p.scale}%;margin:0 auto">${art('#111')}</div><b>${p.name.replace('دستگاه رست ','')}</b><span class="tag">${p.cap.split(' در')[0]}</span></button>`).join('')}</div>
-  <div class="grid" id="cards"></div>`;
+    <button class="opt" data-k="${k}"><div style="width:${55+45*p.scale}%;margin:0 auto">${art('#111')}</div><b>${p.name.replace('دستگاه رست ','')}</b><span class="tag">${p.cap.split(' در')[0]}</span><span class="pr"><small>شروع از</small>${fa(Math.round(p.base*.88/1e6))}<small>میلیون تومان</small></span></button>`).join('')}</div>
+  <div class="grid" id="cards" hidden></div>`;
   const pk=document.getElementById('pk');
   pk.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
-    pk.classList.add('chosen');pk.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
+    pk.classList.add('chosen');setTimeout(()=>go('product',b.dataset.k),550);pk.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
     const k=b.dataset.k,p=PRODUCTS[k];
     document.getElementById('cards').innerHTML=`<div class="card" onclick="go('product','${k}')"><div class="art">${art('#111',p.scale)}</div><h3>${p.name}</h3><span class="tag">${p.cap}</span><span class="price"><small>شروع از</small> ${fmt(p.base*.88)}</span><button class="btn alt">مشاهده و سفارش</button></div>`;
     document.getElementById('cards').scrollIntoView({behavior:'smooth',block:'nearest'});
